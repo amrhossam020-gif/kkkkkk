@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اختبر نفسك</title>
     <style>
-        /* تصميم أساسي سريع لضمان عمل الواجهة بشكل جميل وواضح */
         body { font-family: Tahoma, sans-serif; background-color: #f7f9fc; margin: 0; padding: 20px; direction: rtl; text-align: right; }
         .container { max-width: 600px; margin: 40px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         h1, h2 { color: #333; text-align: center; }
@@ -84,7 +83,7 @@
     <!-- مكتبة قراءة Excel -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
-    <!-- كود الموقع المدمج لتجنب أخطاء الملفات الخارجية -->
+    <!-- كود الموقع المُحدث -->
     <script>
         const examFiles = [
             "1-اسبقيات استخدام وسائل امن المواصلات.xlsx",
@@ -168,14 +167,14 @@
 
         async function testLoad(fileName) {
             try {
-                const res = await fetch(`Questions/${fileName}`);
+                const res = await fetch(`questions/${fileName}`);
                 if (!res.ok) throw new Error();
                 const buffer = await res.arrayBuffer();
                 const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
             } catch (e) {
-                alert("تعذر تحميل الملف، تأكد من وجود مجلد Questions في الجذر.");
+                alert("تعذر تحميل الملف، تأكد من وجود مجلد questions بحروف صغيرة.");
             }
         }
 
@@ -200,7 +199,7 @@
             }
 
             try {
-                const res = await fetch(`Questions/${fileName}`);
+                const res = await fetch(`questions/${fileName}`);
                 if (!res.ok) throw new Error();
                 const buffer = await res.arrayBuffer();
                 const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
@@ -255,7 +254,6 @@
                         btn.style.backgroundColor = '#dc3545';
                     }
                     document.getElementById('score').textContent = score;
-                    // تعطيل الأزرار بعد الاختيار وإظهار زر التالي
                     Array.from(ansDiv.children).forEach(b => b.onclick = null);
                     document.getElementById('nextBtn').style.display = 'block';
                 };
