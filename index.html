@@ -148,24 +148,16 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-        // دالة لجلب الملف مع تجربة حرف Q كبير أو q صغير لتجاوز مشكلة 404 نهائياً
+        // استخدام encodeURIComponent لضمان قراءة الأسماء العربية والمسافات بشكل صحيح 100%
         async function fetchExcelFile(fileName) {
-            let paths = [
-                `questions/${fileName}`,
-                `Questions/${fileName}`,
-                `./questions/${fileName}`,
-                `./Questions/${fileName}`
-            ];
-
-            for (let path of paths) {
-                try {
-                    let res = await fetch(path);
-                    if (res.ok) return res;
-                } catch (e) {
-                    continue;
-                }
+            const encodedName = encodeURIComponent(fileName);
+            let res = await fetch(`questions/${encodedName}`);
+            if (!res.ok) {
+                // محاولة تجربة الحرف الكبير احتياطياً
+                res = await fetch(`Questions/${encodedName}`);
             }
-            throw new Error("تعذر العثور على الملف في المسارات المتاحة.");
+            if (!res.ok) throw new Error("تعذر الوصول للملف");
+            return res;
         }
 
         function loadFiles() {
@@ -186,7 +178,7 @@
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
             } catch (e) {
-                alert("تعذر الوصول للملف، تأكد من رفع مجلد الـ questions في مستودعك بجانب ملف index.html.");
+                alert("تعذر تحميل الملف، تأكد من وجوده داخل مجلد questions بنفس الاسم العربي بالضبط.");
             }
         }
 
@@ -228,7 +220,7 @@
                 showPage('quizPage');
                 renderQuestion();
             } catch (e) {
-                alert("حدث خطأ أثناء تحميل الأسئلة من الملف.");
+                alert("حدث خطأ أثناء تحميل الأسئلة.");
             }
         }
 
