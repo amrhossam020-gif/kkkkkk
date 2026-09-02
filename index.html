@@ -83,7 +83,7 @@
     <!-- مكتبة قراءة Excel -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
-    <!-- كود الموقع المُحدث -->
+    <!-- كود الموقع المُحدث ليتطابق مع مجلد questions بحرف q صغير -->
     <script>
         const examFiles = [
             "1-اسبقيات استخدام وسائل امن المواصلات.xlsx",
@@ -167,6 +167,7 @@
 
         async function testLoad(fileName) {
             try {
+                // تم تعديل المسار ليطابق الحرف الصغير questions
                 const res = await fetch(`questions/${fileName}`);
                 if (!res.ok) throw new Error();
                 const buffer = await res.arrayBuffer();
@@ -174,7 +175,7 @@
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
             } catch (e) {
-                alert("تعذر تحميل الملف، تأكد من وجود مجلد questions بحروف صغيرة.");
+                alert("تعذر الوصول للملف، تأكد أن مجلد questions بحرف q صغير.");
             }
         }
 
@@ -199,6 +200,7 @@
             }
 
             try {
+                // تم تعديل المسار ليطابق الحرف الصغير questions
                 const res = await fetch(`questions/${fileName}`);
                 if (!res.ok) throw new Error();
                 const buffer = await res.arrayBuffer();
