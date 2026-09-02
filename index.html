@@ -148,14 +148,10 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-        // استخدام encodeURIComponent لضمان قراءة الأسماء العربية والمسافات بشكل صحيح 100%
         async function fetchExcelFile(fileName) {
             const encodedName = encodeURIComponent(fileName);
-            let res = await fetch(`questions/${encodedName}`);
-            if (!res.ok) {
-                // محاولة تجربة الحرف الكبير احتياطياً
-                res = await fetch(`Questions/${encodedName}`);
-            }
+            // استخدام حرف Q كبير ليتطابق مع مجلد Questions
+            let res = await fetch(`Questions/${encodedName}`);
             if (!res.ok) throw new Error("تعذر الوصول للملف");
             return res;
         }
@@ -178,7 +174,7 @@
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
             } catch (e) {
-                alert("تعذر تحميل الملف، تأكد من وجوده داخل مجلد questions بنفس الاسم العربي بالضبط.");
+                alert("تعذر تحميل الملف، تأكد من وجوده داخل مجلد Questions.");
             }
         }
 
