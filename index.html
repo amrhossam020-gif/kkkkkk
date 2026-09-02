@@ -22,7 +22,6 @@
 
 <body>
 
-    <!-- الرئيسية -->
     <div id="homePage" class="page active">
         <div class="container">
             <h1>🧠 اختبر نفسك</h1>
@@ -32,7 +31,6 @@
         </div>
     </div>
 
-    <!-- الملفات والتصنيفات -->
     <div id="filesPage" class="page">
         <div class="container">
             <h2>📁 الملفات والتصنيفات</h2>
@@ -41,7 +39,6 @@
         </div>
     </div>
 
-    <!-- إعداد الاختبار -->
     <div id="quizSetupPage" class="page">
         <div class="container">
             <h2>🎯 إعداد الاختبار</h2>
@@ -56,7 +53,6 @@
         </div>
     </div>
 
-    <!-- صفحة الاختبار -->
     <div id="quizPage" class="page">
         <div class="container">
             <div class="quizHeader">
@@ -70,7 +66,6 @@
         </div>
     </div>
 
-    <!-- النتيجة -->
     <div id="resultPage" class="page">
         <div class="container">
             <h1>🎉 انتهى الاختبار</h1>
@@ -80,10 +75,8 @@
         </div>
     </div>
 
-    <!-- مكتبة قراءة Excel -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
-    <!-- كود الموقع المُحدث ليتطابق مع مجلد questions بحرف q صغير -->
     <script>
         const examFiles = [
             "1-اسبقيات استخدام وسائل امن المواصلات.xlsx",
@@ -155,6 +148,26 @@
             document.getElementById(pageId).classList.add('active');
         }
 
+        // دالة لجلب الملف مع تجربة حرف Q كبير أو q صغير لتجاوز مشكلة 404 نهائياً
+        async function fetchExcelFile(fileName) {
+            let paths = [
+                `questions/${fileName}`,
+                `Questions/${fileName}`,
+                `./questions/${fileName}`,
+                `./Questions/${fileName}`
+            ];
+
+            for (let path of paths) {
+                try {
+                    let res = await fetch(path);
+                    if (res.ok) return res;
+                } catch (e) {
+                    continue;
+                }
+            }
+            throw new Error("تعذر العثور على الملف في المسارات المتاحة.");
+        }
+
         function loadFiles() {
             const list = document.getElementById('filesList');
             list.innerHTML = '';
@@ -167,15 +180,13 @@
 
         async function testLoad(fileName) {
             try {
-                // تم تعديل المسار ليطابق الحرف الصغير questions
-                const res = await fetch(`questions/${fileName}`);
-                if (!res.ok) throw new Error();
+                const res = await fetchExcelFile(fileName);
                 const buffer = await res.arrayBuffer();
                 const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                 alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
             } catch (e) {
-                alert("تعذر الوصول للملف، تأكد أن مجلد questions بحرف q صغير.");
+                alert("تعذر الوصول للملف، تأكد من رفع مجلد الـ questions في مستودعك بجانب ملف index.html.");
             }
         }
 
@@ -200,9 +211,7 @@
             }
 
             try {
-                // تم تعديل المسار ليطابق الحرف الصغير questions
-                const res = await fetch(`questions/${fileName}`);
-                if (!res.ok) throw new Error();
+                const res = await fetchExcelFile(fileName);
                 const buffer = await res.arrayBuffer();
                 const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
                 const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
@@ -219,7 +228,7 @@
                 showPage('quizPage');
                 renderQuestion();
             } catch (e) {
-                alert("حدث خطأ أثناء تحميل الأسئلة.");
+                alert("حدث خطأ أثناء تحميل الأسئلة من الملف.");
             }
         }
 
