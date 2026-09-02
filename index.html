@@ -3,357 +3,270 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>اختبر نفسك</title>
-
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* تصميم أساسي سريع لضمان عمل الواجهة بشكل جميل وواضح */
+        body { font-family: Tahoma, sans-serif; background-color: #f7f9fc; margin: 0; padding: 20px; direction: rtl; text-align: right; }
+        .container { max-width: 600px; margin: 40px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        h1, h2 { color: #333; text-align: center; }
+        .page { display: none; }
+        .page.active { display: block; }
+        button { background: #007bff; color: white; border: none; padding: 12px 20px; margin: 8px 0; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
+        button:hover { background: #0056b3; }
+        button.secondary { background: #6c757d; }
+        button.secondary:hover { background: #5a6268; }
+        .quizHeader { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; color: #555; background: #e9ecef; padding: 10px; border-radius: 6px; }
+        #filesList div { padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #dee2e6; }
+    </style>
 </head>
 
 <body>
 
-    <!-- ========================= -->
     <!-- الرئيسية -->
-    <!-- ========================= -->
-
     <div id="homePage" class="page active">
-
         <div class="container">
-
             <h1>🧠 اختبر نفسك</h1>
-
-            <p class="subtitle">
-                بنك أسئلة واختباراتك في مكان واحد
-            </p>
-
-            <div class="menu">
-
-                <button onclick="showPage('importPage')">
-                    📊 استيراد Excel
-                </button>
-
-                <button onclick="showPage('filesPage'); loadFiles()">
-                    📁 الملفات والتصنيفات
-                </button>
-
-                <button onclick="showPage('questionsPage'); loadQuestions()">
-                    📚 بنك الأسئلة
-                </button>
-
-                <button onclick="showPage('quizSetupPage'); loadQuizFilters()">
-                    🎯 ابدأ الاختبار
-                </button>
-
-            </div>
-
+            <p style="text-align: center; color: #666;">بنك أسئلة واختباراتك في مكان واحد</p>
+            <button onclick="showPage('filesPage'); loadFiles()">📁 الملفات والتصنيفات (58 امتحان)</button>
+            <button onclick="showPage('quizSetupPage'); loadQuizFilters()">🎯 ابدأ الاختبار</button>
         </div>
-
     </div>
 
-
-    <!-- ========================= -->
-    <!-- استيراد Excel -->
-    <!-- ========================= -->
-
-    <div id="importPage" class="page">
-
-        <div class="container">
-
-            <h2>📊 استيراد أسئلة Excel</h2>
-
-            <p>
-                اختار ملف أو أكثر من ملفات Excel
-            </p>
-
-            <input
-                type="file"
-                id="excelFiles"
-                accept=".xlsx,.xls,.csv"
-                multiple
-            >
-
-            <div id="selectedFiles"></div>
-
-            <button onclick="importExcel()">
-                📥 استيراد الأسئلة
-            </button>
-
-            <div id="importResult"></div>
-
-            <button
-                class="secondary"
-                onclick="showPage('homePage')"
-            >
-                🏠 الرئيسية
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- ========================= -->
     <!-- الملفات والتصنيفات -->
-    <!-- ========================= -->
-
     <div id="filesPage" class="page">
-
         <div class="container">
-
             <h2>📁 الملفات والتصنيفات</h2>
-
-            <div id="filesList">
-
-                <p>
-                    جاري تحميل الملفات...
-                </p>
-
-            </div>
-
-            <button
-                class="secondary"
-                onclick="showPage('homePage')"
-            >
-                🏠 الرئيسية
-            </button>
-
+            <div id="filesList"><p>جاري تحميل الملفات...</p></div>
+            <button class="secondary" onclick="showPage('homePage')">🏠 الرئيسية</button>
         </div>
-
     </div>
 
-
-    <!-- ========================= -->
-    <!-- بنك الأسئلة -->
-    <!-- ========================= -->
-
-    <div id="questionsPage" class="page">
-
-        <div class="container">
-
-            <h2>📚 بنك الأسئلة</h2>
-
-            <select
-                id="questionCategoryFilter"
-                onchange="filterQuestionFiles()"
-            >
-
-                <option value="">
-                    كل التصنيفات
-                </option>
-
-            </select>
-
-            <select
-                id="questionFileFilter"
-                onchange="loadQuestions()"
-            >
-
-                <option value="">
-                    كل الملفات
-                </option>
-
-            </select>
-
-            <div class="bankInfo">
-
-                عدد الأسئلة:
-                <b id="questionsCount">
-                    0
-                </b>
-
-            </div>
-
-            <div id="questionsList"></div>
-
-            <button
-                class="secondary"
-                onclick="showPage('homePage')"
-            >
-                🏠 الرئيسية
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- ========================= -->
     <!-- إعداد الاختبار -->
-    <!-- ========================= -->
-
     <div id="quizSetupPage" class="page">
-
         <div class="container">
-
             <h2>🎯 إعداد الاختبار</h2>
-
-            <label>
-                التصنيف
-            </label>
-
-            <select
-                id="quizCategory"
-                onchange="filterQuizFiles()"
-            >
-
-                <option value="">
-                    كل التصنيفات
-                </option>
-
-            </select>
-
-            <label>
-                الملف
-            </label>
-
-            <select id="quizFile">
-
-                <option value="">
-                    كل الملفات
-                </option>
-
-            </select>
-
-            <label>
-                عدد الأسئلة
-            </label>
-
-            <input
-                type="number"
-                id="quizCount"
-                min="1"
-                value="20"
-            >
-
-            <button onclick="startQuiz()">
-                🚀 ابدأ الاختبار
-            </button>
-
-            <button
-                class="secondary"
-                onclick="showPage('homePage')"
-            >
-                🏠 الرئيسية
-            </button>
-
+            <label style="font-weight: bold; display: block; margin-top: 10px;">اختر ملف الامتحان:</label>
+            <select id="quizFile" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc;"></select>
+            
+            <label style="font-weight: bold; display: block; margin-top: 10px;">عدد الأسئلة:</label>
+            <input type="number" id="quizCount" min="1" value="20" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
+            
+            <button onclick="startQuiz()">🚀 ابدأ الاختبار</button>
+            <button class="secondary" onclick="showPage('homePage')">🏠 الرئيسية</button>
         </div>
-
     </div>
 
-
-    <!-- ========================= -->
     <!-- صفحة الاختبار -->
-    <!-- ========================= -->
-
     <div id="quizPage" class="page">
-
         <div class="container">
-
             <div class="quizHeader">
-
-                <span>
-                    السؤال:
-                    <b id="questionNumber">1</b>
-                    من
-                    <b id="totalQuestions">0</b>
-                </span>
-
-                <span>
-                    الدرجة:
-                    <b id="score">0</b>
-                </span>
-
+                <span>السؤال: <b id="questionNumber">1</b> من <b id="totalQuestions">0</b></span>
+                <span>الدرجة: <b id="score">0</b></span>
             </div>
-
-
-            <div class="quizLayout">
-
-                <div class="quizMain">
-
-                    <h2 id="questionText">
-                        السؤال
-                    </h2>
-
-                    <div id="answers"></div>
-
-                    <button
-                        id="nextQuestion"
-                        onclick="nextQuestion()"
-                    >
-                        السؤال التالي
-                    </button>
-
-                </div>
-
-
-                <!-- أرقام الأسئلة -->
-
-                <div class="questionNumbers">
-
-                    <h3>
-                        📋 الأسئلة
-                    </h3>
-
-                    <div id="questionNumbersList"></div>
-
-                </div>
-
-            </div>
-
+            <h2 id="questionText" style="color: #222; margin-bottom: 20px;">السؤال</h2>
+            <div id="answers"></div>
+            <button id="nextBtn" onclick="nextQuestion()" style="margin-top: 20px; display:none;">السؤال التالي</button>
+            <button class="secondary" onclick="showPage('homePage')" style="margin-top: 10px;">🏠 الرئيسية</button>
         </div>
-
     </div>
 
-
-    <!-- ========================= -->
     <!-- النتيجة -->
-    <!-- ========================= -->
-
     <div id="resultPage" class="page">
-
         <div class="container">
-
-            <h1>
-                🎉 انتهى الاختبار
-            </h1>
-
-            <h2 id="finalScore">
-                0 / 0
-            </h2>
-
-            <p id="resultMessage"></p>
-
-            <!-- الأسئلة التي تمت الإجابة عليها بشكل خاطئ -->
-
-            <div id="wrongAnswers"></div>
-
-            <button
-                onclick="showPage('quizSetupPage'); loadQuizFilters()"
-            >
-                🔄 اختبار جديد
-            </button>
-
-            <button
-                class="secondary"
-                onclick="showPage('homePage')"
-            >
-                🏠 الرئيسية
-            </button>
-
+            <h1>🎉 انتهى الاختبار</h1>
+            <h2 id="finalScore" style="text-align: center; color: #28a745; font-size: 28px;">0 / 0</h2>
+            <button onclick="showPage('quizSetupPage'); loadQuizFilters()">🔄 اختبار جديد</button>
+            <button class="secondary" onclick="showPage('homePage')">🏠 الرئيسية</button>
         </div>
-
     </div>
-
 
     <!-- مكتبة قراءة Excel -->
-
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
-    <!-- كود الموقع -->
+    <!-- كود الموقع المدمج لتجنب أخطاء الملفات الخارجية -->
+    <script>
+        const examFiles = [
+            "1-اسبقيات استخدام وسائل امن المواصلات.xlsx",
+            "2-التهديدات الامنية على وسائل المواصلات الاشارية.xlsx",
+            "3-وثائق الرمز المستخدمة فى القوات المسلحة.xlsx",
+            "إجراءات الوقاية من الأسلحة النووية.xlsx",
+            "اجراءات تنظيم معركة.xlsx",
+            "إستخدام اللواء المدرع فر م فرميكا الفرقة المدرعة.xlsx",
+            "استخدام اللواء المشاة.xlsx",
+            "اسلوب إعداد البحوث العسكرية.xlsx",
+            "إسلوب تنظيم وإدارة معركة نطاق التغطية.xlsx",
+            "إعادة التجميع وغيار القوات.xlsx",
+            "أعمال قتال الإبرار الجوى - البحرى التكتيكى.xlsx",
+            "أعمال قتال ل 15 مقل.xlsx",
+            "أعمال قتال ل 16 مش - فر 16 مش.xlsx",
+            "أقسام ومهام الشئون الإدارية_.xlsx",
+            "الإتجاهات وكيفية تعديلها - سيكولوجية التعلم والتدريب.xlsx",
+            "الإشراف على التدريب.xlsx",
+            "الإعداد والتحضير لمشروع الملاحة البرية.xlsx",
+            "الأقمار الصناعية وإستخداماتها-1.xlsx",
+            "الأمن السيبراني.xlsx",
+            "البيان العملى.xlsx",
+            "التأمين الإدارى للواء فى الدفاع.xlsx",
+            "التأمين الإدارى للواء فى الهجوم من الإتصال على دفاعات العدو المجهزة.xlsx",
+            "التأمين الإلكترونى.xlsx",
+            "التجهيز الهندسى لموقع ك.xlsx",
+            "الخواص الفنية والتك لمعدات كيما -ك مش (معدات طهر- أجهزة سطع كيما - شع).xlsx",
+            "الدروس المستفادة من حرب أكتوبر.xlsx",
+            "الذكاء الإجتماعي.xlsx",
+            "الذكاء الإصطناعي.xlsx",
+            "العمليات الدفاعية الإسرائيلية.xlsx",
+            "العمليات الهجومية الإسرائيلية.xlsx",
+            "الغازات الحربية.xlsx",
+            "اللواء المدرع المستقل الفرقة المدرعة.xlsx",
+            "المسير والمعركة التصادمية.xlsx",
+            "المعركة الدفاعية.xlsx",
+            "المعركة الهجومية.xlsx",
+            "الهجوم فى حالات خاصة.xlsx",
+            "تحديد الإحداثيات.xlsx",
+            "تخطيط و تنظيم التدريب.xlsx",
+            "تنظيم وإستخدام عناصر الإستطلاع.xlsx",
+            "تنظيم واستخدام عناصر المهندسيين العسكريين.xlsx",
+            "تنظيم واستخدام قوات الدفاع الجوى.xlsx",
+            "تنظيم واستخدام قوات المدفعية.xlsx",
+            "تنظيم وإمكانيات وحدات الإستطلاع العام مستوى ل  فر.xlsx",
+            "تنظيمات العدو.xlsx",
+            "حرب المعلومات.xlsx",
+            "خطة رفع حالات الاستعداد القتالى ( ك ).xlsx",
+            "دور الأفرع الرئيسية والأسلحة والقوات المختلفة لصالح أعمال الحرب الإلكترونية.xlsx",
+            "دور القوات المسلحة في ثورة 25 يناير.xlsx",
+            "طرق إنشاء حقول الألغام-1.xlsx",
+            "طرق فتح الثغرات فى حقول الألغام-1.xlsx",
+            "فائق الصعوبة-1.xlsx",
+            "فائق الصعوبة-2.xlsx",
+            "فائق الصعوبة-3.xlsx",
+            "مجمع-1.xlsx",
+            "مجمع-2.xlsx",
+            "مجمع-3.xlsx",
+            "مخاطر أستخدام الأنترنت.xlsx",
+            "معدلات الأداء لتنفيذ التجهيز الهندسى-1.xlsx"
+        ];
 
-    <script src="script.js"></script>
+        let currentQuizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
 
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function loadFiles() {
+            const list = document.getElementById('filesList');
+            list.innerHTML = '';
+            examFiles.forEach(file => {
+                const div = document.createElement('div');
+                div.innerHTML = `<span>${file.replace('.xlsx', '')}</span> <button style="width:auto; padding:6px 12px;" onclick="testLoad('${file}')">فحص الامتحان</button>`;
+                list.appendChild(div);
+            });
+        }
+
+        async function testLoad(fileName) {
+            try {
+                const res = await fetch(`Questions/${fileName}`);
+                if (!res.ok) throw new Error();
+                const buffer = await res.arrayBuffer();
+                const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+                const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                alert(`تم تحميل الملف بنجاح! عدد الأسئلة: ${rows.length}`);
+            } catch (e) {
+                alert("تعذر تحميل الملف، تأكد من وجود مجلد Questions في الجذر.");
+            }
+        }
+
+        function loadQuizFilters() {
+            const select = document.getElementById('quizFile');
+            select.innerHTML = '';
+            examFiles.forEach(file => {
+                const opt = document.createElement('option');
+                opt.value = file;
+                opt.textContent = file.replace('.xlsx', '');
+                select.appendChild(opt);
+            });
+        }
+
+        async function startQuiz() {
+            const fileName = document.getElementById('quizFile').value;
+            const count = parseInt(document.getElementById('quizCount').value) || 20;
+
+            if (!fileName) {
+                alert("يرجى اختيار امتحان.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`Questions/${fileName}`);
+                if (!res.ok) throw new Error();
+                const buffer = await res.arrayBuffer();
+                const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+                const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+
+                if (rows.length === 0) {
+                    alert("هذا الملف فارغ.");
+                    return;
+                }
+
+                currentQuizQuestions = rows.sort(() => 0.5 - Math.random()).slice(0, count);
+                currentQuestionIndex = 0;
+                score = 0;
+
+                showPage('quizPage');
+                renderQuestion();
+            } catch (e) {
+                alert("حدث خطأ أثناء تحميل الأسئلة.");
+            }
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= currentQuizQuestions.length) {
+                showPage('resultPage');
+                document.getElementById('finalScore').textContent = `${score} من ${currentQuizQuestions.length}`;
+                return;
+            }
+
+            const q = currentQuizQuestions[currentQuestionIndex];
+            document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = currentQuizQuestions.length;
+            document.getElementById('score').textContent = score;
+
+            document.getElementById('questionText').textContent = q.Question || q.سؤال || q.Title || "السؤال بدون متن";
+
+            const options = [q.Option1 || q.اختيار1 || q.A, q.Option2 || q.اختيار2 || q.B, q.Option3 || q.اختيار3 || q.C, q.Option4 || q.اختيار4 || q.D].filter(Boolean);
+            
+            const ansDiv = document.getElementById('answers');
+            ansDiv.innerHTML = '';
+            document.getElementById('nextBtn').style.display = 'none';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.textContent = opt;
+                btn.style.backgroundColor = '#007bff';
+                btn.onclick = () => {
+                    const correct = q.Correct || q.الإجابة || q.Answer;
+                    if (correct && String(correct).trim() === String(opt).trim()) {
+                        btn.style.backgroundColor = '#28a745';
+                        score++;
+                    } else {
+                        btn.style.backgroundColor = '#dc3545';
+                    }
+                    document.getElementById('score').textContent = score;
+                    // تعطيل الأزرار بعد الاختيار وإظهار زر التالي
+                    Array.from(ansDiv.children).forEach(b => b.onclick = null);
+                    document.getElementById('nextBtn').style.display = 'block';
+                };
+                ansDiv.appendChild(btn);
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+    </script>
 </body>
-
 </html>
