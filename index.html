@@ -150,7 +150,6 @@
 
         async function fetchExcelFile(fileName) {
             const encodedName = encodeURIComponent(fileName);
-            // استخدام حرف Q كبير ليتطابق مع مجلد Questions
             let res = await fetch(`Questions/${encodedName}`);
             if (!res.ok) throw new Error("تعذر الوصول للملف");
             return res;
